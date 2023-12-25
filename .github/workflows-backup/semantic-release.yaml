@@ -1,0 +1,41 @@
+name: semantic release
+
+on:
+   workflow_call:
+      inputs:
+        persist-creds:
+          description: "Persist credentials"
+          required: false
+          type: boolean
+          default: true
+      secrets:
+         token:
+            required: true
+      outputs:
+        next_version_tag:
+          description: "The next version tag from semantic release"
+          value: ${{ jobs.SemanticRelease.outputs.next_version_tag }}
+
+jobs:
+   SemanticRelease:
+      runs-on: ubuntu-latest
+      outputs:
+        next_version_tag: ${{ steps.version_tag_step.outputs.next }}
+      steps:
+        - name: Git clone the repository
+          uses: actions/checkout@v4
+          with:
+            persist-credentials: ${{ inputs.persist-creds }}
+            token: ${{ secrets.token }}
+        - name: Setup Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18
+        - name: Install dependencies
+          run: npm ci
+        - name: Release
+          env:
+            GITHUB_TOKEN: ${{ secrets.token }}
+          run: npx semantic-release
+        - id: version_tag_step
+          run: echo "next=$(cat next_version.txt)" >> $GITHUB_OUTPUT

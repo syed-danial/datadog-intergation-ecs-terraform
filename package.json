@@ -1,0 +1,96 @@
+{
+  "name": "terraform-ltk-ecs",
+  "version": "0.0.0-development",
+  "description": "Automated Terraform Releases for AWS ECS",
+  "main": " ",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LenderToolkit/terraform-ltk-ecs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "semantic-release": "semantic-release"
+  },
+  "author": "Carlos Luna",
+  "license": "ISC",
+  "devDependencies": {
+    "@semantic-release/github": "^9.0.4",
+    "git-cz": "^4.9.0",
+    "semantic-release": "^21.1.1",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
+    }
+  },
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github",
+    "@semantic-release/npm",
+    {
+      "npmPublish": false
+    },
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "./utilities/update_version.sh ${nextRelease.version} ${branch.name}"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "tfvars/**/*"
+        ]
+      }
+    ]
+  ],
+  "release": {
+    "branches": [
+      "prod",
+      {
+        "name": "dev",
+        "prerelease": true
+      },
+      {
+        "name": "stage",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "./utilities/update_version.sh ${nextRelease.version} ${branch.name}"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "tfvars/**/*"
+          ]
+        }
+      ]
+    ]
+  },
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "dependencies": {
+    "commitizen": "^4.3.0"
+  }
+}
