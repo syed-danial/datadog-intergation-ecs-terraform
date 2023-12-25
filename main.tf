@@ -3,6 +3,7 @@ resource "aws_iam_policy" "task_policy" {
   name        = "ltk-ecs-task-policy"
   description = "Task policy for ECS"
 
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -201,7 +202,7 @@ resource "aws_ecs_service" "ltk_encompdev_api_service" {
     subnets         = ["your-subnet-id"] //Add your subnet id here
     security_groups = ["your-sg-id"] //Add your security group id here
   }
-  
+
   lifecycle {
     ignore_changes = [desired_count, task_definition]
   }
