@@ -1,3 +1,2 @@
 # datadog-intergation-ecs-terraform
-This repostory contains code that enables log forwarding of AWS ECS through DD Log Forwarder Lambda function. Code is in master branch
-
+This repostory contains terraform code that enables log forwarding of AWS ECS through DD Log Forwarder Lambda function.
